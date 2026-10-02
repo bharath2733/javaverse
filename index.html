@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaVerse 3D — Master Java with Interactive 3D Animations & Code Playground</title>
+  <meta name="description" content="Learn Java from complete beginner to master with interactive 3D visualizations, Stack vs Heap memory simulation, line-by-line code breakdowns, and live code playground.">
+  <meta name="keywords" content="Java, Learn Java, 3D Animated Programming, Java for Beginners, JVM, Stack vs Heap, Object-Oriented Programming">
+
+  <!-- Google Fonts: Outfit (UI) & Fira Code (Code blocks) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Three.js (3D WebGL Library - Local with CDN Fallback) -->
+  <script src="js/three.min.js"></script>
+  <script>if (typeof THREE === 'undefined') document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\\/script>');</script>
+</head>
+<body>
+
+  <!-- Three.js 3D Background Canvas -->
+  <div id="canvas-container"></div>
+
+  <!-- Primary Application Overlay -->
+  <div id="app-layout">
+
+    <!-- Top Navigation Header -->
+    <header class="navbar" role="banner">
+      <div class="nav-brand" id="brand-logo" onclick="window.App.handleBrandClick();" title="JavaVerse 3D (Tip: Ctrl+Shift+U for Instructor Access)">
+        <div class="brand-icon">☕</div>
+        <div>
+          <span class="brand-title">JavaVerse 3D</span>
+          <span class="brand-badge">Beginner Edition</span>
+        </div>
+      </div>
+
+      <nav class="nav-links" role="navigation" aria-label="Main Navigation">
+        <button class="nav-btn active" data-view="3d-world" id="nav-btn-3d" aria-label="3D Cosmos Explorer">
+          <span>🌌</span><span class="label">3D World</span>
+        </button>
+        <button class="nav-btn" data-view="lessons" id="nav-btn-lessons" aria-label="Java Curriculum & Lessons">
+          <span>📖</span><span class="label">Curriculum</span>
+        </button>
+        <button class="nav-btn" data-view="memory-visualizer" id="nav-btn-memory" aria-label="3D Stack vs Heap Memory Visualizer">
+          <span>🧠</span><span class="label">3D Memory Lab</span>
+        </button>
+        <button class="nav-btn" data-view="playground" id="nav-btn-playground" aria-label="Live Java Code Playground">
+          <span>💻</span><span class="label">Playground</span>
+        </button>
+        <button class="nav-btn" data-view="certificate" id="nav-btn-certificate" aria-label="Mastery Certificate">
+          <span>🎓</span><span class="label">Certificate</span>
+        </button>
+      </nav>
+
+      <div class="nav-stats">
+        <!-- Instructor / Admin Mode Badge (Hidden by default, shown when verified) -->
+        <button class="admin-badge admin-only" id="admin-status-badge" onclick="window.App.openAdminModal('dashboard')" title="Instructor Mode Active — Click for controls" aria-label="Instructor Controls">
+          👑 <span>Instructor</span>
+        </button>
+
+        <div class="xp-badge" id="xp-container" title="Your Experience Points and Rank">
+          <span>⚡</span>
+          <span id="user-xp-display">0 XP</span>
+          <span style="opacity: 0.6;">|</span>
+          <span id="user-rank-display" style="font-weight: 600;">Byte Novice</span>
+        </div>
+
+        <button class="icon-btn" id="btn-open-mobile" title="Open on Mobile Phone" aria-label="Open on Mobile">
+          📱
+        </button>
+        <button class="icon-btn" id="btn-open-search" title="Search Java Concepts (Ctrl+K)" aria-label="Search">
+          🔍
+        </button>
+        <button class="icon-btn" id="btn-open-cheatsheet" title="Java Syntax Cheatsheet" aria-label="Cheatsheet">
+          📑
+        </button>
+        <button class="icon-btn" id="btn-sound-toggle" title="Sound Effects" aria-label="Toggle Sound">
+          🔊
+        </button>
+        <button class="icon-btn admin-only" id="btn-nav-unlock-all" onclick="window.App.requestUnlockAll()" title="Unlock All 7 Modules (Instructor Mode)" aria-label="Unlock All Modules">
+          🔓
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main role="main">
+
+      <!-- ==============================================
+           VIEW 1: 3D WORLD / HERO EXPLORER
+           ============================================== -->
+      <section id="view-3d-world" class="view-section active" aria-labelledby="hero-heading">
+        <div class="hero-banner">
+          <div class="hero-tagline">✦ Next-Gen Visual Learning For Beginners ✦</div>
+          <h1 class="hero-title" id="hero-heading">Master Java in a <span class="gradient-text">Living 3D Universe</span></h1>
+          <p class="hero-subtitle">
+            Say goodbye to boring textbooks. Explore JVM internals in 3D, inspect real-time Stack & Heap memory lasers, and write real Java code directly in your browser.
+          </p>
+          <div class="hero-actions">
+            <button class="btn-primary" id="hero-btn-start-journey" onclick="window.App.switchView('lessons');">
+              🚀 Start Chapter 1
+            </button>
+            <button class="btn-secondary" id="hero-btn-launch-memory" onclick="window.App.switchView('memory-visualizer');">
+              🧠 Launch 3D Memory Lab
+            </button>
+            <button class="btn-secondary" id="hero-btn-launch-playground" onclick="window.App.switchView('playground');">
+              ⚡ Open Code Playground
+            </button>
+          </div>
+        </div>
+
+        <!-- 3D Orbiting Modules Catalog -->
+        <div class="orbit-modules-container">
+          <div class="section-heading-row">
+            <div>
+              <h2 class="section-title">✨ Java Learning Roadmap</h2>
+              <p class="section-subtitle">Seven progressive modules meticulously sequenced for absolute beginners.</p>
+            </div>
+          </div>
+
+          <div class="modules-grid" id="modules-grid-container">
+            <!-- Dynamically populated from JAVA_CURRICULUM -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           VIEW 2: LESSONS & IN-DEPTH CURRICULUM
+           ============================================== -->
+      <section id="view-lessons" class="view-section" aria-labelledby="curriculum-heading">
+        <div class="curriculum-layout">
+          <!-- Sidebar Navigation -->
+          <aside class="curriculum-sidebar" role="complementary" aria-label="Curriculum Chapters">
+            <div class="sidebar-title">
+              <span id="curriculum-heading">Course Modules</span>
+              <span style="font-size: 0.8rem; color: var(--neon-cyan);">7 Chapters</span>
+            </div>
+
+            <!-- Testing Lock Override Toolbar (Instructor Mode Only) -->
+            <div class="dev-override-bar admin-only" id="dev-override-bar">
+              <button class="btn-dev-override" id="btn-unlock-all" onclick="window.App.requestUnlockAll()" title="Unlock all 7 modules and final exam for testing">
+                <span>🔓</span> Unlock All (Instructor Mode)
+              </button>
+              <button class="btn-dev-reset" id="btn-reset-all" onclick="window.App.resetProgress()" title="Reset progress back to Chapter 1 locked state">
+                ↺ Reset
+              </button>
+            </div>
+
+            <ul class="sidebar-chapter-list" id="sidebar-chapter-list">
+              <!-- Dynamically populated -->
+            </ul>
+          </aside>
+
+          <!-- Main Lesson Content -->
+          <article class="interactive-panel" id="lesson-content-container" role="article">
+            <!-- Dynamically populated based on active chapter -->
+          </article>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           VIEW 3: 3D MEMORY MODEL VISUALIZER (STACK VS HEAP)
+           ============================================== -->
+      <section id="view-memory-visualizer" class="view-section" aria-labelledby="memory-viz-heading">
+        <div class="memory-viz-layout">
+          <div class="memory-viz-card">
+            <div class="memory-viz-header">
+              <div class="viz-title-block">
+                <h2 id="memory-viz-heading">🧠 3D Java Memory Architecture Visualizer</h2>
+                <p>Observe how primitives stay on the Stack, while Objects live on the Heap connected by live Reference Lasers.</p>
+              </div>
+              <div style="display:flex; gap:0.5rem;">
+                <span class="brand-badge" style="border-color:var(--neon-cyan); color:var(--neon-cyan);">STACK: Left LIFO Frame</span>
+                <span class="brand-badge" style="border-color:var(--neon-amber); color:var(--neon-amber);">HEAP: Right Object Matrix</span>
+              </div>
+            </div>
+
+            <!-- 3D Canvas Stage for Memory Simulation -->
+            <div class="viz-stage-wrapper">
+              <canvas id="memory-canvas"></canvas>
+            </div>
+
+            <!-- Interactive Step Controls Panel -->
+            <div class="viz-controls-panel">
+              <div class="step-tracker-bar">
+                <div class="step-info-box">
+                  <div style="font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;" id="step-tracker-label">
+                    Step 1 of 6
+                  </div>
+                  <div>
+                    <code class="step-code-preview" id="step-code-preview">int score = 42;</code>
+                  </div>
+                </div>
+
+                <div class="memory-btn-group">
+                  <button class="btn-viz" id="btn-mem-prev" onclick="window.App.memoryViz.prevStep()">
+                    ◀ Previous
+                  </button>
+                  <button class="btn-viz primary-action" id="btn-mem-next" onclick="window.App.memoryViz.nextStep()">
+                    Next Step ▶
+                  </button>
+                  <button class="btn-viz gc-action" id="btn-mem-gc" onclick="window.App.memoryViz.runGC()">
+                    🧹 Trigger Garbage Collector
+                  </button>
+                  <button class="btn-viz" id="btn-mem-reset" onclick="window.App.memoryViz.reset()">
+                    ↺ Reset
+                  </button>
+                </div>
+              </div>
+
+              <div class="step-explanation" id="step-explanation">
+                Primitive integer is pushed directly onto the STACK frame. No Heap allocation needed.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           VIEW 4: LIVE JAVA CODE PLAYGROUND & RUNNER
+           ============================================== -->
+      <section id="view-playground" class="view-section" aria-labelledby="playground-heading">
+        <div class="playground-layout">
+          <!-- Editor Pane -->
+          <div class="editor-card">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span>📝</span>
+                <span id="playground-heading">Java Source Editor (Main.java)</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:0.6rem;">
+                <span id="code-save-indicator" class="save-status-pill" title="Code changes auto-saved to browser storage">
+                  <span class="save-pulse-dot"></span>
+                  <span id="code-save-text">Auto-Saved</span>
+                </span>
+                <select id="playground-chapter-select" style="background:#090e21; color:#fff; border:1px solid var(--border-glass); padding:4px 8px; border-radius:6px; font-family:var(--font-ui); font-size:0.82rem; outline:none;">
+                  <!-- Populated dynamically -->
+                </select>
+                <button class="btn-primary" id="btn-run-code" style="padding: 5px 14px; font-size:0.85rem;">
+                  ▶ Run Code
+                </button>
+                <button class="btn-secondary" id="btn-reset-code" style="padding: 5px 10px; font-size:0.85rem;" title="Reset to template">
+                  ↺
+                </button>
+              </div>
+            </div>
+
+            <div class="editor-wrapper">
+              <div class="line-numbers" id="line-numbers" aria-hidden="true">1</div>
+              <textarea id="playground-editor" class="code-textarea" spellcheck="false" aria-label="Java Code Editor"></textarea>
+            </div>
+          </div>
+
+          <!-- Console & Execution Trace Pane -->
+          <div class="console-card">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span>🖥️</span>
+                <span>Virtual JVM Console & Bytecode Trace</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:0.8rem;">
+                <span id="exec-time-badge" style="font-size:0.75rem; color:var(--text-muted); font-family:var(--font-code);">0ms</span>
+                <button class="code-btn" id="btn-clear-console">Clear</button>
+              </div>
+            </div>
+
+            <div class="console-body" id="console-output" role="region" aria-live="polite">
+              <span class="console-entry info">// Ready. Click "▶ Run Code" to compile and execute in virtual JVM.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==============================================
+           VIEW 5: CAPSTONE EXAM & COMPLETION CERTIFICATE
+           ============================================== -->
+      <section id="view-certificate" class="view-section" aria-labelledby="certificate-heading">
+        <div class="certificate-layout">
+
+          <!-- Section Banner -->
+          <div class="cert-banner">
+            <span class="cert-pill">🎓 Capstone Credential</span>
+            <h1 class="cert-title" id="certificate-heading">JavaVerse Verified <span class="gradient-text">Mastery Certification</span></h1>
+            <p class="cert-subtitle">
+              Validate your Java software engineering knowledge. Complete all 7 core modules, achieve a passing score of 70% or higher on the Comprehensive Certification Exam, and earn your official verified Completion Certificate.
+            </p>
+          </div>
+
+          <!-- Dynamic Container managed by window.App.renderCertificateView() -->
+          <div id="certificate-view-container">
+            <!-- Dynamically populated based on student exam & completion status -->
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Floating 3D Scene Action Button Overlay -->
+    <div class="scene-overlay-controls">
+      <button class="scene-btn" id="btn-quick-memory" onclick="window.App.switchView('memory-visualizer');">
+        <span>🧠</span> 3D Memory Lab
+      </button>
+      <button class="scene-btn" id="btn-quick-curriculum" onclick="window.App.switchView('lessons');">
+        <span>📖</span> Read Lessons
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ==============================================
+       MODALS: Search & Cheatsheet
+       ============================================== -->
+  <!-- Search Modal -->
+  <div class="modal-overlay" id="search-modal" role="dialog" aria-modal="true" aria-labelledby="search-modal-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" id="search-modal-title"><span>🔍</span> Search JavaVerse Curriculum</h3>
+        <button class="modal-close-btn" aria-label="Close Modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="search-input-wrapper">
+          <span class="search-icon-pos">🔍</span>
+          <input type="text" class="search-input" id="global-search-input" placeholder="Search keywords (e.g. static, OOP, HashMap, try-catch)..." autofocus>
+        </div>
+        <div class="search-results-list" id="search-results-list">
+          <div style="color:var(--text-muted); text-align:center; padding:1.5rem;">
+            Type any Java concept to search immediately...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Cheatsheet Modal -->
+  <div class="modal-overlay" id="cheatsheet-modal" role="dialog" aria-modal="true" aria-labelledby="cheatsheet-modal-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" id="cheatsheet-modal-title"><span>📑</span> Java Syntax Quick Cheatsheet</h3>
+        <button class="modal-close-btn" aria-label="Close Modal">&times;</button>
+      </div>
+      <div class="modal-body" id="cheatsheet-content">
+        <!-- Populated from JAVA_CHEATSHEET -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Share JavaVerse with Mobile / Another Device -->
+  <div class="modal-overlay" id="mobile-modal" role="dialog" aria-modal="true" aria-labelledby="mobile-modal-title">
+    <div class="modal-box mobile-connect-box">
+      <div class="modal-header">
+        <h3 class="modal-title" id="mobile-modal-title"><span>📱</span> Open on Mobile Phone</h3>
+        <button class="modal-close-btn" aria-label="Close Modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="mobile-connect-card">
+          <div class="tunnel-status-badge">
+            <span class="status-pulse-dot"></span>
+            <span id="tunnel-status-text">Live Cloud Tunnel Active</span>
+          </div>
+
+          <p class="mobile-hint-text">
+            Scan this QR code with your phone camera or click copy below to open JavaVerse instantly.
+            Works on <strong>mobile data (4G/5G) or college Wi-Fi</strong> with zero setup!
+          </p>
+
+          <!-- Interactive QR Code Frame -->
+          <div class="qr-code-wrapper" title="Scan with Phone Camera">
+            <img id="mobile-qr-image" 
+                 src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https%3A%2F%2F06c3d6ecef996c.lhr.life&color=00f0ff&bgcolor=0a0e24" 
+                 alt="Scan QR code to open JavaVerse" 
+                 width="190" 
+                 height="190">
+            <div class="qr-scan-corner corner-tl"></div>
+            <div class="qr-scan-corner corner-tr"></div>
+            <div class="qr-scan-corner corner-bl"></div>
+            <div class="qr-scan-corner corner-br"></div>
+          </div>
+
+          <!-- Direct URL Bar with Copy Button -->
+          <div class="mobile-link-container">
+            <div class="mobile-url-box" id="mobile-share-url" title="Click to copy">https://06c3d6ecef996c.lhr.life</div>
+            <button class="btn-primary" id="btn-copy-mobile-link" type="button">
+              <span>📋</span> <span id="copy-btn-label">Copy Link</span>
+            </button>
+          </div>
+
+          <div class="mobile-share-status" id="mobile-share-status" role="status" aria-live="polite"></div>
+
+          <!-- Wi-Fi vs Cloud explanation note -->
+          <div class="mobile-wifi-tip">
+            <span class="tip-icon">💡</span>
+            <div class="tip-body">
+              <strong>Bypasses Campus Wi-Fi Isolation:</strong> College networks (such as KLEF-TH) block direct laptop-to-phone connections. This live cloud HTTPS link bypasses all router restrictions so you can learn smoothly anywhere.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Master Instructor / Admin Authorization Modal -->
+  <div class="modal-overlay" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title">
+    <div class="modal-box admin-modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" id="admin-modal-title">
+          <span id="admin-modal-icon">👑</span> <span id="admin-modal-header-text">Instructor Authorization</span>
+        </h3>
+        <button class="modal-close-btn" id="btn-close-admin-modal" aria-label="Close Modal" onclick="window.App.closeAdminModal()">&times;</button>
+      </div>
+      <div class="modal-body admin-modal-body">
+
+        <!-- VIEW 1: FIRST-TIME SETUP (Set private Master Password) -->
+        <div id="admin-view-setup" style="display: none;">
+          <div class="admin-shield-badge">
+            <div class="shield-icon">🛡️</div>
+            <h4>Create Master Password</h4>
+            <p>
+              Welcome Creator! To ensure only you can unlock all 7 modules, set a secure Master Password (supports letters, numbers, and symbols like <code>MySecretPass@2026</code>).
+            </p>
+          </div>
+
+          <form id="admin-setup-form" onsubmit="event.preventDefault(); window.App.handleCreatePin();">
+            <div class="admin-form-group">
+              <label for="admin-new-pin">Master Password (min 6 characters)</label>
+              <div class="admin-input-wrapper">
+                <input type="password" id="admin-new-pin" placeholder="e.g. MySecretPass@2026" autocomplete="new-password" required>
+                <button type="button" class="btn-toggle-pin" onclick="window.App.togglePinVisibility('admin-new-pin', this)" aria-label="Toggle password visibility">👁️</button>
+              </div>
+            </div>
+
+            <div class="admin-form-group">
+              <label for="admin-confirm-pin">Confirm Master Password</label>
+              <div class="admin-input-wrapper">
+                <input type="password" id="admin-confirm-pin" placeholder="Re-enter password to confirm" autocomplete="new-password" required>
+                <button type="button" class="btn-toggle-pin" onclick="window.App.togglePinVisibility('admin-confirm-pin', this)" aria-label="Toggle password visibility">👁️</button>
+              </div>
+            </div>
+
+            <label class="admin-remember-row">
+              <input type="checkbox" id="admin-setup-remember" checked>
+              <span>Remember Instructor Mode on this device</span>
+            </label>
+
+            <div class="admin-error-msg" id="admin-setup-error"></div>
+
+            <button type="submit" class="btn-primary admin-submit-btn" id="btn-save-master-pin">
+              <span>🔐</span> Set Master Password & Unlock Modules
+            </button>
+          </form>
+        </div>
+
+        <!-- VIEW 2: VERIFICATION (Enter Master Password) -->
+        <div id="admin-view-verify" style="display: none;">
+          <div class="admin-shield-badge">
+            <div class="shield-icon">🔒</div>
+            <h4>Instructor Verification</h4>
+            <p>
+              Curriculum bypass is restricted. Enter your private Master Password to verify instructor credentials and unlock all 7 modules.
+            </p>
+          </div>
+
+          <form id="admin-verify-form" onsubmit="event.preventDefault(); window.App.handleVerifyPin();">
+            <div class="admin-form-group" style="text-align: left;">
+              <label for="admin-verify-pin" style="display: block; margin-bottom: 0.4rem; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Master Password</label>
+              <div class="admin-pin-display-wrap">
+                <input type="password" id="admin-verify-pin" class="admin-pin-input-field" placeholder="Enter Master Password" autocomplete="current-password" autofocus required>
+                <button type="button" class="btn-toggle-pin" onclick="window.App.togglePinVisibility('admin-verify-pin', this)" aria-label="Toggle password visibility">👁️</button>
+              </div>
+            </div>
+
+            <label class="admin-remember-row">
+              <input type="checkbox" id="admin-verify-remember" checked>
+              <span>Keep Instructor Mode active on this device</span>
+            </label>
+
+            <div class="admin-error-msg" id="admin-verify-error"></div>
+
+            <button type="submit" class="btn-primary admin-submit-btn" id="btn-verify-pin-submit">
+              <span>🔓</span> Verify & Unlock All
+            </button>
+
+            <div class="admin-footer-links">
+              <button type="button" class="btn-link-subtle" onclick="window.App.handleForgotPin()">Forgot Master Password?</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- VIEW 3: INSTRUCTOR CONTROL PANEL (When authenticated) -->
+        <div id="admin-view-dashboard" style="display: none;">
+          <div class="admin-shield-badge active-mode">
+            <div class="shield-icon">👑</div>
+            <h4>Instructor Controls Active</h4>
+            <p>
+              You are currently authenticated as the Course Administrator.
+            </p>
+          </div>
+
+          <div class="admin-dashboard-actions">
+            <button class="btn-admin-action action-unlock" type="button" onclick="window.App.executeUnlockAll(); window.App.closeAdminModal();">
+              <span class="action-icon">🔓</span>
+              <div class="action-details">
+                <strong>Unlock All 7 Modules & Exam</strong>
+                <span>Instant completion for testing and demonstrations (+350 XP)</span>
+              </div>
+            </button>
+
+            <button class="btn-admin-action action-reset" type="button" onclick="window.App.resetProgress(); window.App.closeAdminModal();">
+              <span class="action-icon">↺</span>
+              <div class="action-details">
+                <strong>Reset Learner Progression</strong>
+                <span>Lock Modules 2–7 and Capstone Exam back to start</span>
+              </div>
+            </button>
+
+            <button class="btn-admin-action action-change-pin" type="button" onclick="window.App.showChangePinView();">
+              <span class="action-icon">🔑</span>
+              <div class="action-details">
+                <strong>Change Master Password</strong>
+                <span>Update your private security password</span>
+              </div>
+            </button>
+
+            <button class="btn-admin-action action-logout" type="button" onclick="window.App.logoutAdmin();">
+              <span class="action-icon">🚪</span>
+              <div class="action-details">
+                <strong>Lock & Exit Instructor Mode</strong>
+                <span>Re-hide administrative tools and require password next time</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- VIEW 4: CHANGE PASSWORD -->
+        <div id="admin-view-change-pin" style="display: none;">
+          <div class="admin-shield-badge">
+            <div class="shield-icon">🔑</div>
+            <h4>Update Master Password</h4>
+            <p>Enter your current password and choose your new private Master Password.</p>
+          </div>
+
+          <form id="admin-change-pin-form" onsubmit="event.preventDefault(); window.App.handleChangePin();">
+            <div class="admin-form-group">
+              <label for="admin-current-pin">Current Master Password</label>
+              <div class="admin-input-wrapper">
+                <input type="password" id="admin-current-pin" placeholder="Enter current password" required>
+                <button type="button" class="btn-toggle-pin" onclick="window.App.togglePinVisibility('admin-current-pin', this)" aria-label="Toggle password visibility">👁️</button>
+              </div>
+            </div>
+
+            <div class="admin-form-group">
+              <label for="admin-change-new-pin">New Master Password (min 6 characters)</label>
+              <div class="admin-input-wrapper">
+                <input type="password" id="admin-change-new-pin" placeholder="e.g. MySecretPass@2026" required>
+                <button type="button" class="btn-toggle-pin" onclick="window.App.togglePinVisibility('admin-change-new-pin', this)" aria-label="Toggle password visibility">👁️</button>
+              </div>
+            </div>
+
+            <div class="admin-form-group">
+              <label for="admin-change-confirm-pin">Confirm New Master Password</label>
+              <div class="admin-input-wrapper">
+                <input type="password" id="admin-change-confirm-pin" placeholder="Confirm new password" required>
+                <button type="button" class="btn-toggle-pin" onclick="window.App.togglePinVisibility('admin-change-confirm-pin', this)" aria-label="Toggle password visibility">👁️</button>
+              </div>
+            </div>
+
+            <div class="admin-error-msg" id="admin-change-error"></div>
+
+            <button type="submit" class="btn-primary admin-submit-btn">
+              <span>💾</span> Save New Master Password
+            </button>
+
+            <div class="admin-footer-links">
+              <button type="button" class="btn-link-subtle" onclick="window.App.openAdminModal('dashboard')">← Back to Instructor Dashboard</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- Floating Toast Notification Banner -->
+  <div id="toast-notification" role="status" aria-live="polite">
+    <span class="toast-icon" id="toast-icon">🔒</span>
+    <span class="toast-message" id="toast-message">Message text</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/sound-engine.js"></script>
+  <script src="js/curriculum-data.js"></script>
+  <script src="js/java-simulator.js"></script>
+  <script src="js/three-scene.js"></script>
+  <script src="js/memory-visualizer.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
